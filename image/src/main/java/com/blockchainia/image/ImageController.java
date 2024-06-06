@@ -35,15 +35,19 @@ public class ImageController {
   }
    
   @GetMapping("/image")
-  public String imageGen() {
+  public String imageGen(@RequestParam String imagePromptEntered) {
     ImageOptions options = ImageOptionsBuilder.builder()
         .withModel("dall-e-3")
         .withHeight(1024)
         .withWidth(1024)
         .build();
-    String message = "Cat chasing a car";
+    
+    if(imagePromptEntered.isEmpty()){
+      imagePromptEntered = "Create a pixelated Celtic monster";
+    }
 
-    ImagePrompt imagePrompt = new ImagePrompt(message, options);
+
+    ImagePrompt imagePrompt = new ImagePrompt(imagePromptEntered, options);
     ImageResponse response = imageModel.call(imagePrompt);
     String imageUrl = response.getResult().getOutput().getUrl();
 
